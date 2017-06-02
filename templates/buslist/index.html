@@ -1,0 +1,94 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+
+<h2 align="center"> School BUS Schedule of Columbia University  </h2>
+
+<form  method = "POST">
+  <h4>Departure from 116 S </h4>
+  BusLine
+  <select name="bus_line">
+  <option selected="selected"  disabled="disabled"></option>
+    <option value="Red Line"> Red </option>
+    <option value="Green Line"> Green </option>
+    <option value="Blue Line"> Blue </option>
+  </select> 
+  From
+  <select name="time1">
+  <option selected="selected"  disabled="disabled"></option>
+    <option value="8:00:00"> 8:00am</option>
+    <option value="8:30:00"> 8:30am</option>
+    <option value="9:00:00"> 9:00am</option>
+    <option value="9:30:00"> 9:30am</option>
+    <option value="10:30:00"> 10:30am</option>
+    <option value="11:30:00"> 11:30am</option>
+    <option value="12:30:00"> 12:30am</option>
+    <option value="13:30:00"> 13:30pm</option>
+    <option value="14:30:00"> 14:30pm</option>
+    <option value="15:30:00"> 15:30pm</option>
+    <option value="16:30:00"> 16:30pm</option>
+    <option value="17:30:00"> 17:30pm</option>
+    <option value="18:30:00"> 18:30pm</option>
+    <option value="19:30:00"> 19:30pm</option>
+    <option value="20:30:00"> 20:30pm</option>
+    <option value="21:30:00"> 21:30pm</option>
+    <option value="22:30:00"> 22:30pm</option>
+    <option value="23:30:00"> 23:30pm </option>
+    <option value="24:30:00"> 00:30am </option>
+  </select>
+  To
+    <select name="time2">
+    <option selected="selected"  disabled="disabled"></option>
+    <option value="8:00:00"> 8:00am</option>
+    <option value="8:30:00"> 8:30am</option>
+    <option value="9:00:00"> 9:00am</option>
+    <option value="9:30:00"> 9:30am</option>
+    <option value="10:30:00"> 10:30am</option>
+    <option value="11:30:00"> 11:30am</option>
+    <option value="12:30:00"> 12:30am</option>
+    <option value="13:30:00"> 13:30pm</option>
+    <option value="14:30:00"> 14:30pm</option>
+    <option value="15:30:00"> 15:30pm</option>
+    <option value="16:30:00"> 16:30pm</option>
+    <option value="17:30:00"> 17:30pm</option>
+    <option value="18:30:00"> 18:30pm</option>
+    <option value="19:30:00"> 19:30pm</option>
+    <option value="20:30:00"> 20:30pm</option>
+    <option value="21:30:00"> 21:30pm</option>
+    <option value="22:30:00"> 22:30pm</option>
+    <option value="23:30:00"> 23:30pm </option>
+    <option value="24:30:00"> 00:30am </option>
+  </select>
+   <button type="button"  onclick='this.form.submit()'>Search</button>
+ 
+</form>
+ 
+
+<br>
+<div class="table-responsive-vertical shadow-z-1">
+  <!-- Table starts here -->
+  <table id="table" class="table table-hover table-mc-light-blue" >
+    <thead>
+      <tr>
+        <th>Bus Line</th>
+        <th>Available Time</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for row in rows %}
+      <tr>
+        <td > {{row[0]}}</td>
+        <td>{{row[1]}}</td>
+        <td> {{row[2]}}</td>
+        <td>{{row[3]}}</td>
+        <td>{{row[4]}}</td>
+        
+
+      </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+</div>  
+{% endblock %}

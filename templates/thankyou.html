@@ -1,0 +1,26 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+    <head>
+        <title>Thanks for your information!</title>
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+    </head>
+    <body>
+        <div id="container">
+            
+            <div id="content">
+                <h3>Hello {{profile.given_name}} </h3>
+                <p style="font-size:20px">
+                Thanks for your information!
+
+                </p>
+                
+            <br>
+            <div class="back">
+                 <a href="/google">Return to main page</a>
+            </div>
+                
+        
+        </div>
+    </body>
+{% endblock %}
+

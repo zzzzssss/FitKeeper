@@ -1,0 +1,144 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+<link href='http://fonts.googleapis.com/css?family=Montserrat:700' rel='stylesheet' type='text/css'>
+<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+<link href='http://fonts.googleapis.com/css?family=Montserrat:700' rel='stylesheet' type='text/css'>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.1/jquery.form.min.js" integrity="sha384-tIwI8+qJdZBtYYCKwRkjxBGQVZS3gGozr3CtI+5JF/oL1JmPEHzCEnIKbDbLTCer" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/rating.css') }}">
+     
+          
+<div class="container">
+
+ <div class="well col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xs-offset-2 col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
+
+ {% for profile in profiles %}
+ <h2> You have one invitation</h2>
+        <div class="row user-row">
+            <div class="col-xs-3 col-sm-2 col-md-1 col-lg-1">
+                <img class="img-circle"
+                     src="{{ profile.photo}}"
+                     alt="User Pic"
+                     height="50" width="50">
+            </div>
+            <div class="col-xs-8 col-sm-9 col-md-10 col-lg-10">
+                <strong>{{profile.name}}</strong><br>
+                <span class="text-muted">User rating: {{profile.avg_rating}}</span>
+            </div>
+
+            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 dropdown-user" data-for=".{{profile.uid}}">
+
+                <i class="glyphicon glyphicon-chevron-down text-muted"></i>
+            </div>
+        </div>
+        <div class="row user-infos {{profile.uid}}">
+            <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 col-xs-offset-0 col-sm-offset-0 col-md-offset-1 col-lg-offset-1">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">User information</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-3 col-lg-3 hidden-xs hidden-sm">
+                                <img class="img-circle"
+
+                                     src="{{ profile.photo}}"
+
+                                     alt="User Pic"
+                                     height="100" width="100">
+                            </div>
+                            <!--<div class="col-xs-2 col-sm-2 hidden-md hidden-lg">
+                                <img class="img-circle"
+                                     src="{{ url_for('static', filename='img/1.jpg') }}"
+                                     alt="User Pic"
+                                     height="50" width="50">
+                            </div>-->
+                            
+                            <div class=" col-md-9 col-lg-9 hidden-xs hidden-sm">
+                                <strong>{{profile.name}}</strong><br>
+                                <div class="stars">
+                               
+                                <form name="information" class="form-horizontal"  role="form", method="post" action="{{ url_for('thankyou') }}">     
+                                     <th><b> <input class="btn btn-sucess" type="submit" name="decline" value="Decline"/></b></th>
+                                      
+                                     <th><b> <input class="btn btn-sucess" type="submit" name="accept" value="Accept"/></b></th>
+                                      
+                                      <input class="text" name="invitor/{{invitor.uid}}" style="display: none;"></label>
+                                      <input class="text" name="acceptor/{{acceptor.uid}}", style="display: none;" size="1"></label>
+                                </form>
+                                </div>
+                                
+
+                                <table class="table table-user-information">
+                                    <tbody>
+                                    
+                                    <tr>
+                                        <td>Registered since:</td>
+                                        <td>{{profile.signup_date}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>User rating:</td>
+                                        <td>{{profile.avg_rating}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Gender:</td>
+                                        <td>{{profile.gender}}</td>
+                                    </tr>
+                                    <tr>  
+                                        <td>Age:<td>
+                                        <tf>{{profile.age}}</td>
+                                    </tr>
+
+                                    <tr>  
+                                        <td>Rating times:<td>
+                                        <tf>{{profile.rating_ctr}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+    var panels = $('.user-infos');
+    var panelsButton = $('.dropdown-user');
+    //console.log(panelsButton)
+    panels.hide();
+    //Click dropdown
+    panelsButton.click(function() {
+        //get data-for attribute
+        var dataFor = $(this).attr('data-for');
+        
+        var idFor = $(dataFor);
+        //current button
+        var currentButton = $(this);
+        idFor.slideToggle(400, function() {
+            //Completed slidetoggle
+            if(idFor.is(':visible'))
+            {
+                currentButton.html('<i class="glyphicon glyphicon-chevron-up text-muted"></i>');
+            }
+            else
+            {
+                currentButton.html('<i class="glyphicon glyphicon-chevron-down text-muted"></i>');
+            }
+        })
+    });
+    $('[data-toggle="tooltip"]').tooltip();
+    
+});
+
+</script>
+  
+{% endblock %}

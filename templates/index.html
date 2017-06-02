@@ -1,0 +1,1028 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+<meta charset="utf-8">
+
+<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+<link href='http://fonts.googleapis.com/css?family=Montserrat:700' rel='stylesheet' type='text/css'>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.1/jquery.form.min.js" integrity="sha384-tIwI8+qJdZBtYYCKwRkjxBGQVZS3gGozr3CtI+5JF/oL1JmPEHzCEnIKbDbLTCer" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I=" crossorigin="anonymous"></script>
+<link href="../static/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+
+<script type="text/javascript">
+$(window).ready(function(){
+$(".boton").wrapInner('<div class=botontext></div>');
+    
+    $(".botontext").clone().appendTo( $(".boton") );
+    
+    $(".boton").append('<span class="twist"></span><span class="twist"></span><span class="twist"></span><span class="twist"></span>');
+    
+    $(".twist").css("width", "25%").css("width", "+=3px");
+});
+
+$(document).ready(function() {
+    var panels = $('.user-infos');
+    var panelsButton = $('.dropdown-user');
+    panels.hide();
+
+    //Click dropdown
+    panelsButton.click(function() {
+        //get data-for attribute
+        var dataFor = $(this).attr('data-for');
+        var idFor = $(dataFor);
+
+        //current button
+        var currentButton = $(this);
+        idFor.slideToggle(400, function() {
+            //Completed slidetoggle
+            if(idFor.is(':visible'))
+            {
+                currentButton.html('<i class="glyphicon glyphicon-chevron-up text-muted"></i>');
+            }
+            else
+            {
+                currentButton.html('<i class="glyphicon glyphicon-chevron-down text-muted"></i>');
+            }
+        })
+    });
+    $('[data-toggle="tooltip"]').tooltip();
+
+});
+$('#modal').on('show.bs.modal', function () {
+       $(this).find('.modal-body').css({
+              width:'auto', 
+              height:'auto', 
+              'max-height':'100%'
+       });
+});
+
+
+
+ // $(function() {
+ //       // bind 'myForm' and provide a simple callback function
+ //       $('#myForm').ajaxForm(function() {
+ //           alert("Thank you for choosing filter!");
+           
+ //       });
+ //     });
+
+function getval(sel)
+{
+    var start=sel.value;
+    console.log(start);
+}
+    
+</script>
+</head>
+        <!-- Jumbotron Header -->
+        <header class="jumbotron hero-spacer">
+        <h1 class="text-center">Welcome to <em>GymPlanner</em>!</h1> 
+        
+        </header>
+        <body>
+        <hr>
+        <form class="text-center" id="myForm" method="POST"> 
+          Find friends by:
+           <select name ="interests" >
+                <option selected="selected"  disabled="disabled"></option>
+                <option value="filter_by_dist">Address</option>
+                <option value="filter_by_rating">Rating</option>
+                <option value="filter_by_age">Age</option>
+                </select>
+                <input type="submit" value="Submit" class="formBtn active" >
+
+                <!-- <input type="submit" value="Submit"> -->
+            </form>
+            <br>
+        
+        <!-- Trigger the modal with a button -->
+        <a class="boton" data-toggle="modal" data-target="#myModal">Recommended friends </a>
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog modal-lg">
+
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Recommended friends</h4>
+                </div>
+
+
+                <div class="modal-body">
+                
+            <div class="well col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xs-offset-2 col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
+
+        {% for profile_html in profile_htmls %}
+         <div class="row user-row">
+            <div class="col-xs-3 col-sm-2 col-md-1 col-lg-1">
+                <img class="img-circle"
+                     src="{{profile_html.photo}}"
+                     alt="User Pic"
+                     height="27" width="27">
+            </div>
+            <div class="col-xs-8 col-sm-9 col-md-10 col-lg-10">
+                <strong>{{profile_html.family_name}}, {{profile_html.given_name}}</strong><br>
+                <span class="text-muted">Rate: {{profile_html.avg_rating}}</span>
+            </div>
+            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 dropdown-user" data-for=".{{profile_html.uid}}">
+                <i class="glyphicon glyphicon-chevron-down text-muted"></i>
+            </div>
+        </div>
+        <div class="row user-infos {{profile_html.uid}}">
+            <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 col-xs-offset-0 col-sm-offset-0 col-md-offset-1 col-lg-offset-1">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">User information</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-3 col-lg-3 hidden-xs hidden-sm">
+                                <img class="img-circle"
+                                     src="{{profile_html.photo}}"
+                                     alt="User Pic"
+                                     height="50" width="50">
+                            </div>
+                            
+                            <div class=" col-md-auto col-lg-auto hidden-xs hidden-sm">
+                                <strong>{{profile_html.family_name}}, {{profile_html.given_name}}</strong> 
+                                <button class="btn btn-sm btn-primary" type="button"
+                                data-toggle="tooltip"
+                                data-original-title="Send invitation to user" id="{{profile_html.uid}}"><i class="glyphicon glyphicon-envelope"></i></button><br>
+
+                                <script type="text/javascript">
+                                $('#{{profile_html.uid}}').click(function(e) {
+                                    e.preventDefault();
+                                    var email;
+                                    var uid;
+                                    var invitations_info;
+                                    email="{{profile_html.email}}";
+                                    uid="{{profile_html.uid}}";
+                                    invitations_info = {
+                                        'email': email,
+                                        'uid': uid
+                                        }
+                                    $.ajax({
+                                        url: "/google",
+                                        method: 'POST',
+                                        contentType:'application/json',
+                                        data: JSON.stringify(invitations_info)   // converts js value to JSON string
+                                        })
+                                        .done(function(result){     // on success get the return object from server
+                                        console.log(result)     // do whatever with it. In this case see it in console
+                                        alert("Sent an invitation to this user");
+                                        });
+                                });
+
+                                </script>
+                                <table class="table table-user-information">
+                                    <tbody>
+                                    <tr>
+                                        <td>Overall Rate:</td>
+                                        <td>{{profile_html.avg_rating}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Registered since:</td>
+                                        <td>{{profile_html.signup_date}}</td>
+                                        
+                                    </tr>
+                                    <tr>
+                                        <td>Gender:</td>
+                                        <td>{{profile_html.gender}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Basketball Interest Score:</td>
+                                        <td>{{profile_html.bas_ctr}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Cardio Interest Score:</td>
+                                        <td>{{profile_html.car_ctr}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Squash Interest Score:</td>
+                                        <td>{{profile_html.squ_ctr}}</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Strength Interest Score:</td>
+                                        <td>{{profile_html.str_ctr}}</td>
+                                    </tr>
+
+                                     <tr>
+                                        <td>Swimming Interest Score:</td>
+                                        <td>{{profile_html.swi_ctr}}</td>
+                                    </tr>
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+    </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+              
+            </div>
+            </div>
+
+
+        <hr>
+        <div class="row text-center", align='center'>
+
+        <h2>Make Reservations</h2> 
+
+            <div class="col-md-4 hero-feature">
+                <div class="thumbnail">
+
+                    <img src="{{ url_for('static', filename='img/stridemachine.jpeg') }}" class="img-circle" alt="Cinque Terre" height="200" width="210">
+                    <div class="caption">
+                        <h3>Stride Machine</h3>
+                        <h6 class="modal-title">Specify your searching criteria</h6>
+                               <form id="checkForm" method="POST">
+                                      <div class="well">
+                                       <div class="row">
+                                      
+                                      <div class="col-md-3"><b>Start:</b></div> 
+                                      <div class="col-md-3"> <b>End: </b></div> 
+
+                                      </div>
+
+                                      <div class="row vertical-align">
+                                      
+                                   
+                                  <div class="col-md-3" centered>         
+                                      <select name="starttime" onchange="getval(this);" style="text-align-last:center; ">
+                                            <option selected="selected"  disabled="disabled"></option>
+                                            <option value="6:00:00"> 6:00am</option>
+                                            <option value="6:30:00"> 6:30am</option>
+                                            <option value="7:00:00"> 7:00am</option>
+                                            <option value="7:30:00"> 7:30am</option>
+                                            <option value="8:00:00"> 8:00am</option>
+                                            <option value="8:30:00"> 8:30am</option>
+                                            <option value="9:00:00"> 9:00am</option>
+                                            <option value="9:30:00"> 9:30am</option>
+                                            <option value="10:30:00"> 10:30am</option>
+                                            <option value="11:30:00"> 11:30am</option>
+                                            <option value="12:30:00"> 12:30am</option>
+                                            <option value="13:30:00"> 13:30pm</option>
+                                            <option value="14:30:00"> 14:30pm</option>
+                                            <option value="15:30:00"> 15:30pm</option>
+                                            <option value="16:30:00"> 16:30pm</option>
+                                            <option value="17:30:00"> 17:30pm</option>
+                                            <option value="18:30:00"> 18:30pm</option>
+                                            <option value="19:30:00"> 19:30pm</option>
+                                            <option value="20:30:00"> 20:30pm</option>
+                                            <option value="21:30:00"> 21:30pm</option>
+                                            <option value="22:30:00"> 22:30pm</option>
+                                            <option value="23:30:00"> 23:30pm </option>
+                                            <option value="24:00:00"> 00:00am </option>
+                                        </select>
+                                    
+                                    </div>
+                              
+                               <div class="col-md-3"> 
+                                 <select name="endtime" id="end">
+
+                                        <!-- <select class="selectpicker form-control" id="end"> -->
+                                    <option selected="selected"  disabled="disabled"></option>
+                                             <option value="6:00:00"> 6:00am</option>
+                                            <option value="6:30:00"> 6:30am</option>
+                                            <option value="7:00:00"> 7:00am</option>
+                                            <option value="7:30:00"> 7:30am</option>
+                                            <option value="8:00:00"> 8:00am</option>
+                                            <option value="8:30:00"> 8:30am</option>
+                                            <option value="9:00:00"> 9:00am</option>
+                                            <option value="9:30:00"> 9:30am</option>
+                                            <option value="10:30:00"> 10:30am</option>
+                                            <option value="11:30:00"> 11:30am</option>
+                                            <option value="12:30:00"> 12:30am</option>
+                                            <option value="13:30:00"> 13:30pm</option>
+                                            <option value="14:30:00"> 14:30pm</option>
+                                            <option value="15:30:00"> 15:30pm</option>
+                                            <option value="16:30:00"> 16:30pm</option>
+                                            <option value="17:30:00"> 17:30pm</option>
+                                            <option value="18:30:00"> 18:30pm</option>
+                                            <option value="19:30:00"> 19:30pm</option>
+                                            <option value="20:30:00"> 20:30pm</option>
+                                            <option value="21:30:00"> 21:30pm</option>
+                                            <option value="22:30:00"> 22:30pm</option>
+                                            <option value="23:30:00"> 23:30pm </option>
+                                            <option value="24:00:00"> 00:00am </option>
+                                        </select>
+                                        
+                              </div>
+
+                              <div class="col-md-3"> 
+
+                              <input name="timeselect" class="formBtn active" type="submit" value="GO"/>
+
+                              </div> 
+
+                              <div class="col-md-3"> 
+
+                               <p>
+                            <a class="btn btn-primary" data-toggle="modal" data-target="#myModal2">Show</a> 
+                              </p>
+
+                              </div> 
+
+                                    </div>
+                                    </div>
+                            </form>
+                        
+                       
+
+                    </div>
+
+                </div>
+            </div>
+         
+            <div class="modal fade" id="myModal2" role="dialog">
+            <!-- <div class="modal-dialog modal-lg"> -->
+            <div class="modal-dialog modal-lg">
+
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <div class="container-fluid">
+
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">SEARCH TIME SLOTS FOR STRIDE MACHINE</h4>
+                  <br>
+                  
+
+                </div>
+                </div>
+
+
+                <div class="modal-body">
+               <div class="well col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xs-offset-2 col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
+                       <form name="reservation" class="form-horizontal"  role="form", method="post" action="{{ url_for('g_index') }}"> 
+                    {% for stride_time in stride_timeslots %}
+                     <div class="row user-row">
+                        <div class="col-xs-3 col-sm-2 col-md-1 col-lg-1">
+                            <img class="img-circle"
+                                 src="{{ url_for('static', filename='img/stridemachine.jpeg') }}"
+                                 alt="User Pic"
+                                 height="55" width="55">
+                        </div>
+                        <div class="col-xs-8 col-sm-9 col-md-10 col-lg-10">
+
+
+                            <!-- <strong></strong> -->
+                            <span class="text-muted"><h4>Machine number:{{stride_time.machine_number}}</h4></span>
+                            <span class="text-muted"><h5 style="color:black;">From:{{stride_time.start_time}} To:{{stride_time.end_time}}</h5></span>
+                            <!-- <span class="text-muted"></span> -->
+                            
+
+                           
+                            <input type="checkbox" name="{{stride_time.machine_number}}/{{stride_time.start_time}}/{{stride_time.end_time}}" value={{stride_time.mid}}>
+                          
+                        </div>
+                        
+                    </div>
+                    
+                    {% endfor %}
+                    <br>
+                    <th><b> <input class="btn btn-primary btn-lg" type="submit" name="reserve_stride" value="Reserve"/></b></th>
+                    </form>
+                </div>
+                </div>
+
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+              
+            </div>
+            </div>
+
+        
+            <div class="col-sm-4 hero-feature">
+                <div class="thumbnail">
+                    <img src="{{ url_for('static', filename='img/eplicalmachine.jpeg') }}" class="img-circle" alt="Cinque Terre" height="200" width="210">
+                    <div class="caption">
+                        <h3>Eliptical Machine</h3>
+                                          <h6 class="modal-title">Specify your searching criteria</h6>
+                               <form id="checkForm" method="POST">
+                                      <div class="well">
+                                      <div class="row">
+                                        <div class="col-md-3"> <b>Start: </b></div> 
+                                        <div class="col-md-3"> <b>End: </b></div> 
+                                       </div>
+
+                                     <div class="row vertical-align">
+                                      
+                                     
+                                  <div class="col-md-3">         
+                                      <select name="starttime" onchange="getval(this);">
+                                            <option selected="selected"  disabled="disabled"></option>
+                                            <option value="6:00:00"> 6:00am</option>
+                                            <option value="6:30:00"> 6:30am</option>
+                                            <option value="7:00:00"> 7:00am</option>
+                                            <option value="7:30:00"> 7:30am</option>
+                                            <option value="8:00:00"> 8:00am</option>
+                                            <option value="8:30:00"> 8:30am</option>
+                                            <option value="9:00:00"> 9:00am</option>
+                                            <option value="9:30:00"> 9:30am</option>
+                                            <option value="10:30:00"> 10:30am</option>
+                                            <option value="11:30:00"> 11:30am</option>
+                                            <option value="12:30:00"> 12:30am</option>
+                                            <option value="13:30:00"> 13:30pm</option>
+                                            <option value="14:30:00"> 14:30pm</option>
+                                            <option value="15:30:00"> 15:30pm</option>
+                                            <option value="16:30:00"> 16:30pm</option>
+                                            <option value="17:30:00"> 17:30pm</option>
+                                            <option value="18:30:00"> 18:30pm</option>
+                                            <option value="19:30:00"> 19:30pm</option>
+                                            <option value="20:30:00"> 20:30pm</option>
+                                            <option value="21:30:00"> 21:30pm</option>
+                                            <option value="22:30:00"> 22:30pm</option>
+                                            <option value="23:30:00"> 23:30pm </option>
+                                            <option value="24:00:00"> 00:00am </option>
+                                        </select>
+                                    
+                                    </div>
+                             
+                               <div class="col-md-3"> 
+                                 <select name="endtime" id="end">
+
+                                        <!-- <select class="selectpicker form-control" id="end"> -->
+                                    <option selected="selected"  disabled="disabled"></option>
+                                            <option value="6:00:00"> 6:00am</option>
+                                            <option value="6:30:00"> 6:30am</option>
+                                            <option value="7:00:00"> 7:00am</option>
+                                            <option value="7:30:00"> 7:30am</option>
+                                            <option value="8:00:00"> 8:00am</option>
+                                            <option value="8:30:00"> 8:30am</option>
+                                            <option value="9:00:00"> 9:00am</option>
+                                            <option value="9:30:00"> 9:30am</option>
+                                            <option value="10:30:00"> 10:30am</option>
+                                            <option value="11:30:00"> 11:30am</option>
+                                            <option value="12:30:00"> 12:30am</option>
+                                            <option value="13:30:00"> 13:30pm</option>
+                                            <option value="14:30:00"> 14:30pm</option>
+                                            <option value="15:30:00"> 15:30pm</option>
+                                            <option value="16:30:00"> 16:30pm</option>
+                                            <option value="17:30:00"> 17:30pm</option>
+                                            <option value="18:30:00"> 18:30pm</option>
+                                            <option value="19:30:00"> 19:30pm</option>
+                                            <option value="20:30:00"> 20:30pm</option>
+                                            <option value="21:30:00"> 21:30pm</option>
+                                            <option value="22:30:00"> 22:30pm</option>
+                                            <option value="23:30:00"> 23:30pm </option>
+                                            <option value="24:00:00"> 00:00am </option>
+                                        </select>
+                                        
+                              </div>
+
+                              <div class="col-md-3"> 
+
+                              <input name="timeselect" class="formBtn active" type="submit" value="GO"/>
+
+                              </div> 
+
+                            <div class="col-md-3"> 
+                              <p><a class="btn btn-primary" data-toggle="modal" data-target="#myModal3">Show</a></p>
+                            </div>
+
+                                    </div>
+                                    </div>
+                            </form>
+                        
+                        
+
+                        
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="myModal3" role="dialog">
+            <!-- <div class="modal-dialog modal-lg"> -->
+            <div class="modal-dialog modal-lg">
+
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <div class="container-fluid">
+
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">SEARCH TIME SLOTS FOR ELIPTICAL MACHINE</h4>
+                  <br>
+                  
+
+                </div>
+                </div>
+
+
+                <div class="modal-body">
+               <div class="well col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xs-offset-2 col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
+                       <form name="reservation" class="form-horizontal"  role="form", method="post" action="{{ url_for('g_index') }}"> 
+                    {% for eliptical_time in eliptical_timeslots %}
+                     <div class="row user-row">
+                        <div class="col-xs-3 col-sm-2 col-md-1 col-lg-1">
+                            <img class="img-circle"
+                                 src="{{ url_for('static', filename='img/eplicalmachine.jpeg') }}"
+                                 alt="User Pic"
+                                 height="55" width="55">
+                        </div>
+                        <div class="col-xs-8 col-sm-9 col-md-10 col-lg-10">
+
+
+                            <span class="text-muted"><h4>Machine number:{{eliptical_time.machine_number}}</h4></span>
+                            <span class="text-muted"><h5 style="color:black;">From:{{eliptical_time.start_time}} To:{{eliptical_time.end_time}}</h5></span>
+                            
+
+                           
+                            <input type="checkbox" name="{{eliptical_time.machine_number}}/{{eliptical_time.start_time}}/{{eliptical_time.end_time}}" value={{eliptical_time.mid}}>
+                          
+                        </div>
+                        
+                    </div>
+                    
+                    {% endfor %}
+                    <th><b> <input class="btn btn-primary btn-lg" type="submit" name="reserve_eliptical" value="Reserve"/></b></th>
+                    </form>
+                </div>
+                </div>
+
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+              
+            </div>
+            </div>
+
+
+            <div class="col-sm-4 hero-feature">
+                <div class="thumbnail">
+                    <img src="{{ url_for('static', filename='img/steathmachine.png') }}" class="img-circle" alt="Cinque Terre" height="160" width="170">
+                    <div class="caption">
+                        <h3>Strength Machine</h3>
+                        
+                         <h6 class="modal-title">Specify your searching criteria</h6>
+                               <form id="checkForm" method="POST">
+                                      <div class="well">
+                                      <div class="row">
+                                      
+                                      <div class="col-md-3"><b>Start:</b></div> 
+                                      <div class="col-md-3"> <b>End:</b> </div> 
+
+
+                                      </div>
+
+                                      <div class="row vertical-align">
+                                      
+                                      
+                                  <div class="col-md-3">         
+                                      <select name="starttime" onchange="getval(this);">
+                                            <option selected="selected"  disabled="disabled"></option>
+                                            <option value="6:00:00"> 6:00am</option>
+                                            <option value="6:30:00"> 6:30am</option>
+                                            <option value="7:00:00"> 7:00am</option>
+                                            <option value="7:30:00"> 7:30am</option>
+                                            <option value="8:00:00"> 8:00am</option>
+                                            <option value="8:30:00"> 8:30am</option>
+                                            <option value="9:00:00"> 9:00am</option>
+                                            <option value="9:30:00"> 9:30am</option>
+                                            <option value="10:30:00"> 10:30am</option>
+                                            <option value="11:30:00"> 11:30am</option>
+                                            <option value="12:30:00"> 12:30am</option>
+                                            <option value="13:30:00"> 13:30pm</option>
+                                            <option value="14:30:00"> 14:30pm</option>
+                                            <option value="15:30:00"> 15:30pm</option>
+                                            <option value="16:30:00"> 16:30pm</option>
+                                            <option value="17:30:00"> 17:30pm</option>
+                                            <option value="18:30:00"> 18:30pm</option>
+                                            <option value="19:30:00"> 19:30pm</option>
+                                            <option value="20:30:00"> 20:30pm</option>
+                                            <option value="21:30:00"> 21:30pm</option>
+                                            <option value="22:30:00"> 22:30pm</option>
+                                            <option value="23:30:00"> 23:30pm </option>
+                                            <option value="24:00:00"> 00:00am </option>
+                                        </select>
+                                    
+                                    </div>
+                              
+                               <div class="col-md-3"> 
+                                 <select name="endtime" id="end">
+
+                                        <!-- <select class="selectpicker form-control" id="end"> -->
+                                    <option selected="selected"  disabled="disabled"></option>
+                                            <option value="6:00:00"> 6:00am</option>
+                                            <option value="6:30:00"> 6:30am</option>
+                                            <option value="7:00:00"> 7:00am</option>
+                                            <option value="7:30:00"> 7:30am</option>
+                                            <option value="8:00:00"> 8:00am</option>
+                                            <option value="8:30:00"> 8:30am</option>
+                                            <option value="9:00:00"> 9:00am</option>
+                                            <option value="9:30:00"> 9:30am</option>
+                                            <option value="10:30:00"> 10:30am</option>
+                                            <option value="11:30:00"> 11:30am</option>
+                                            <option value="12:30:00"> 12:30am</option>
+                                            <option value="13:30:00"> 13:30pm</option>
+                                            <option value="14:30:00"> 14:30pm</option>
+                                            <option value="15:30:00"> 15:30pm</option>
+                                            <option value="16:30:00"> 16:30pm</option>
+                                            <option value="17:30:00"> 17:30pm</option>
+                                            <option value="18:30:00"> 18:30pm</option>
+                                            <option value="19:30:00"> 19:30pm</option>
+                                            <option value="20:30:00"> 20:30pm</option>
+                                            <option value="21:30:00"> 21:30pm</option>
+                                            <option value="22:30:00"> 22:30pm</option>
+                                            <option value="23:30:00"> 23:30pm </option>
+                                            <option value="24:00:00"> 00:00am </option>
+                                        </select>
+                                        
+                              </div>
+
+                              <div class="col-md-3"> 
+
+                              <input name="timeselect" class="formBtn active" type="submit" value="GO"/>
+
+                       
+
+                              </div> 
+
+                              <div class="col-md-3">
+
+                               <p>
+                               <a class="btn btn-primary" data-toggle="modal" data-target="#myModal4">Show</a> 
+                               </p>
+
+                              </div>
+
+
+                                    </div>
+                                    </div>
+                            </form>
+                      
+
+                    </div>
+                </div>
+            </div>
+
+ <div class="modal fade" id="myModal4" role="dialog">
+            <!-- <div class="modal-dialog modal-lg"> -->
+            <div class="modal-dialog modal-lg">
+
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <div class="container-fluid">
+
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">SEARCH TIME SLOTS FOR STRENGTH MACHINE</h4>
+                  <br>
+                  
+
+                </div>
+                </div>
+
+
+                <div class="modal-body">
+               <div class="well col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xs-offset-2 col-sm-offset-2 col-md-offset-2 col-lg-offset-2">
+                       <form name="reservation" class="form-horizontal"  role="form", method="post" action="{{ url_for('g_index') }}"> 
+                    {% for strength_time in strength_timeslots %}
+                     <div class="row user-row">
+                        <div class="col-xs-3 col-sm-2 col-md-1 col-lg-1">
+                            <img class="img-circle"
+                                 src="{{ url_for('static', filename='img/steathmachine.png') }}"
+                                 alt="User Pic"
+                                 height="55" width="55">
+                        </div>
+                        <div class="col-xs-8 col-sm-9 col-md-10 col-lg-10">
+
+
+                            <span class="text-muted"><h4>Machine number:{{strength_time.machine_number}}</h4></span>
+                            <span class="text-muted"><h5 style="color:black;">From:{{strength_time.start_time}} To:{{strength_time.end_time}}</h5></span>
+                            
+                            
+
+                           
+                            <input type="checkbox" name= "{{strength_time.machine_number}}/{{strength_time.start_time}}/{{strength_time.end_time}}" value={{strength_time.mid}}  style="width: 30px; height: 30px;">
+                          
+                        </div>
+                        
+                    </div>
+                    
+                    {% endfor %}
+                    <th><b> <input class="btn btn-primary btn-lg" type="submit" name="reserve_strength" value="Reserve"/></b></th>
+                    </form>
+                </div>
+                </div>
+
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+              
+            </div>
+            </div>
+            
+        </div>
+</body>
+   
+<style> 
+    .boton {
+        width: 200px;
+        height: 50px;
+        margin: 0px auto;
+        display: block;
+        position: relative;
+    }
+    
+    .botontext {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        z-index: 1;
+        text-align: center;
+        line-height: 50px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 12px;
+        text-transform: uppercase;
+    }
+    
+    .twist {
+        display: block;
+        height: 100%;
+        width: 25%;
+        position: relative;
+        float: right;
+        margin-left: -4px;
+    }
+    
+    .twist:before {
+        content: "";
+        width: 100%;
+        height: 100%;
+        background: #1f1d21;
+        bottom: 100%;
+        position: absolute;
+        transform-origin: center bottom 0px; 
+        transform: matrix3d(1, 0, 0, 0, 
+                            0, 0, -1, -0.003, 
+                            0, 1, 0, 0, 
+                            0, 0, 0, 1);
+        
+-webkit-transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); 
+   -moz-transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); 
+     -o-transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); 
+        transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); /* custom */
+    }
+    
+    .twist:after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        top: 100%;
+        height: 100%;
+        background: #1f1d21;
+        transform-origin: center top 0px;
+        transform: matrix3d(1, 0, 0, 0, 
+                            0, 1, 0, 0, 
+                            0, 0, 1, -0.003, 
+                            0, -50, 0, 1);
+        
+-webkit-transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); 
+   -moz-transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); 
+     -o-transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); 
+        transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); /* custom */
+    }
+    
+    .boton:hover .twist:before {
+        background: #fff;
+        transform: matrix3d(1, 0, 0, 0, 
+                            0, 1, 0, 0, 
+                            0, 0, 1, 0.003, 
+                            0, 50, 0, 1);
+    }
+    
+    .boton:hover .twist:after {
+        background: #dedae1;
+        transform: matrix3d(1, 0, 0, 0, 
+                            0, 0, -1, 0.003, 
+                            0, 1, 0, 0, 
+                            0, 0, 0, 1);
+    }
+
+    .boton .twist:nth-of-type(1) {
+        margin-left: 0;
+    }
+    
+    .boton .twist:nth-of-type(1):before,
+    .boton .twist:nth-of-type(1):after {
+        transition-delay: 0s;
+    }
+    
+    .boton .twist:nth-of-type(2):before,
+    .boton .twist:nth-of-type(2):after {
+        transition-delay: 0.1s;
+    }
+    
+    .boton .twist:nth-of-type(3):before,
+    .boton .twist:nth-of-type(3):after {
+        transition-delay: 0.2s;
+    }
+    
+    .boton .twist:nth-of-type(4):before,
+    .boton .twist:nth-of-type(4):after {
+        transition-delay: 0.3s;
+    }
+    
+    .boton .botontext:nth-of-type(1) {
+        color: #3d3b40;
+        bottom: 100%;
+        transform-origin: center bottom 0px; 
+        transform: matrix3d(1, 0, 0, 0, 
+                            0, 0, -1, -0.003, 
+                            0, 1, 0, 0, 
+                            0, 0, 0, 1);
+        
+-webkit-transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); 
+   -moz-transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); 
+     -o-transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); 
+        transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); /* custom */
+    }
+    
+    .boton:hover .botontext:nth-of-type(1) {
+        transform: matrix3d(1, 0, 0, 0, 
+                            0, 1, 0, 0, 
+                            0, 0, 1, 0.003, 
+                            0, 50, 0, 1);
+    }
+    
+    .boton .botontext:nth-of-type(2) {
+        color: #fff;
+        top: 100%;
+        transform-origin: center top 0px;
+        transform: matrix3d(1, 0, 0, 0, 
+                            0, 1, 0, 0, 
+                            0, 0, 1, -0.003, 
+                            0, -50, 0, 1);
+        
+-webkit-transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); 
+   -moz-transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); 
+     -o-transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); 
+        transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); /* custom */
+    }
+    
+    .boton:hover .botontext:nth-of-type(2) {
+        transform: matrix3d(1, 0, 0, 0, 
+                            0, 0, -1, 0.003, 
+                            0, 1, 0, 0, 
+                            0, 0, 0, 1);
+    }
+    /*MENU*/
+    
+    .square {
+        border: 1px solid #1f1d21;
+        height: 26px;
+        width: 26px;
+        display: block;
+        margin: 0px auto;
+        transform: rotate(45deg);
+        overflow: hidden;
+        
+-webkit-transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); 
+   -moz-transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); 
+     -o-transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); 
+        transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); /* custom */
+    }
+    
+
+    .square .burgerwrap {
+        height: 18px;
+        width: 21px;
+        transform: rotate(-45deg);
+        padding-left: 5px;
+        padding-top: 8px;
+
+        
+-webkit-transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); 
+   -moz-transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); 
+     -o-transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); 
+        transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); /* custom */
+    }
+    
+    .square:hover {
+        transform: rotate(135deg);
+        border: 1px solid #fff;
+    }
+    
+    .square:hover .burgerwrap {
+        transform: rotate(-135deg)
+    }
+    
+    .square span {
+        height: 2px;
+        width: 14px;
+        background: #1f1d21;
+        display: block;
+        margin-bottom: 2px;
+        
+-webkit-transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); 
+   -moz-transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); 
+     -o-transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); 
+        transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); /* custom */
+    }
+    
+    .square span:after {
+        content: "";
+        height: 2px;
+        width: 14px;
+        position: absolute;
+        background: #fff;
+        left: -19px;
+        
+-webkit-transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); 
+   -moz-transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); 
+     -o-transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); 
+        transition: all 500ms cubic-bezier(0.970, 0.000, 0.395, 0.995); /* custom */
+    }
+    
+    .square:hover span {
+        margin-left: 26px;
+    }
+    
+    .square:hover span:after {
+        left: 5px;
+    }
+    
+    .square span:nth-of-type(1),
+    .square span:nth-of-type(1):after {
+        transition-delay: 0.1s;
+    }
+    
+    .square span:nth-of-type(2),
+    .square span:nth-of-type(2):after {
+        transition-delay: 0.2s;
+    }
+    
+    .square span:nth-of-type(3),
+    .square span:nth-of-type(3):after {
+        transition-delay: 0.3s;
+    }
+
+    .user-row {
+    margin-bottom: 0px auto;
+}
+
+.user-row:last-child {
+    margin-bottom: 0px auto;
+}
+
+.dropdown-user {
+    margin: 0px auto;
+    padding: 5px;
+    height: 50%;
+}
+
+.dropdown-user:hover {
+    cursor: pointer;
+}
+
+.table-user-information > tbody > tr {
+    border-top: 1px solid rgb(221, 221, 221);
+}
+
+.table-user-information > tbody > tr:first-child {
+    border-top: 0;
+}
+
+.table-user-information > tbody > tr > td {
+    border-top: 0;
+}
+.modal-body {
+    position: relative;
+    overflow-y: auto;
+    max-height: 400px;
+    padding: 15px;
+}
+
+.vertical-align {
+
+    display: flex;
+    align-items: center;
+}
+</style>
+
+{% endblock %}       
+        
+ 

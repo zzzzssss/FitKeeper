@@ -1,0 +1,29 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+    <head>
+        <title>Thanks for your information!</title>
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+    </head>
+    <body>
+        <div id="container">
+            <div class="title">
+                <h1>Thanks for your information!</h1>
+                
+            </div>
+            <div id="content">
+                <h3>Hello {{fn}} </h3>
+                <p style="font-size:20px">
+                Please note that we will use the AWS simple email service to send an email verification. Please check you registered email!
+
+                </p>
+                
+            <br>
+            <div class="back">
+                 <a href="/google">Return to main page</a>
+            </div>
+                
+        
+        </div>
+    </body>
+{% endblock %}
+

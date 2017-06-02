@@ -1,0 +1,309 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-JAW99MJVpJBGcbzEuXk4Az05s/XyDdBomFqNlM3ic+I=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/rating.css') }}">
+<body>
+<br><br>
+<div class="container-fluid well span6">
+  <div class="row-fluid">
+        <div class="col-md-4">
+        <div class="span2" >
+        <img src= {{profile.photo}} class="img-circle", height="200", width="200">
+        <!--<link rel="stylesheet" href="{{ url_for('static', filename='css/rating.css') }}">-->
+                 
+         <form method=post enctype=multipart/form-data>
+         <br><p><input type=file name=file>
+            <input type=submit value=Upload>
+         </form>
+
+        </div>
+        </div>
+        
+        <div class="col-md-4">
+        <div class="span2">
+            <h2>{{profile.family_name}}, {{profile.given_name}}</h2><br>
+            <h6> <p> <i class="glyphicon glyphicon-envelope"></i> Email: {{profile.email}}</h6>
+            <h6> <p> <i class="glyphicon glyphicon glyphicon-dashboard"></i> Singup Date: {{profile.signup_date}}</h6>
+            <h6> <p> <i class="glyphicon glyphicon glyphicon-hourglass"></i>Date of Birth: {{profile.dob}}</h6>
+            
+            <h6><p> <i class="glyphicon glyphicon-user"></i>Gender: {{profile.gender}}</h6>
+            <p></p>
+            <h6><p><i class="glyphicon glyphicon glyphicon-star"></i> Basketball Self-rating: {{profile.bas_ctr}}</p></h6>
+            <h6><p><i class="glyphicon glyphicon glyphicon-star"></i> Swimming Self-rating: {{profile.swi_ctr}}</p></h6> 
+            <h6><p><i class="glyphicon glyphicon glyphicon-star"></i> Cardio Self-rating: {{profile.car_ctr}}</p></h6>
+            <h6><p><i class="glyphicon glyphicon glyphicon-star"></i> Strength Self-rating: {{profile.str_ctr}}</p></h6>
+            <h6><p><i class="glyphicon glyphicon glyphicon-star"></i> Squash Self-rating: {{profile.squ_ctr}}</p></h6>
+        </div>
+        </div>
+      
+
+        <div class="col-md-2">
+
+         <div class="list-group">       
+            <a class="list-group-item text-center list-group-item-info" id="postItem" onclick="showPostForm()"><b>Change Rating</a>
+
+         </div> 
+
+
+         <div id="contactForm" style="display: none;">           
+                    <form method="post" name="change" class="form-horizontal"  role="form", onsubmit="return validateForm()"> 
+                        <p> Basketball
+                        <!---<input placeholder="Basketball" type="number" step="0.1" min="0" max="5" name="basketballscore" />-->
+                        <fieldset class="rating">
+                            <input type="radio" id="star5" name="basketballrating" value="5" required /><label class = "full" for="star5" title="Awesome - 5 stars"></label>
+                            <input type="radio" id="star4half" name="basketballrating" value="4.5" /><label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
+                            <input type="radio" id="star4" name="basketballrating" value="4" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>
+                            <input type="radio" id="star3half" name="basketballrating" value="3.5" /><label class="half" for="star3half" title="Meh - 3.5 stars"></label>
+                            <input type="radio" id="star3" name="basketballrating" value="3" /><label class = "full" for="star3" title="Meh - 3 stars"></label>
+                            <input type="radio" id="star2half" name="basketballrating" value="2.5" /><label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
+                            <input type="radio" id="star2" name="basketballrating" value="2" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
+                            <input type="radio" id="star1half" name="basketballrating" value="1.5" /><label class="half" for="star1half" title="Meh - 1.5 stars"></label>
+                            <input type="radio" id="star1" name="basketballrating" value="1" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
+                            <input type="radio" id="starhalf" name="basketballrating" value="0.5" /><label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+                        </fieldset>
+                         <p> Swimming
+                         <!---<input placeholder="Swimming" type="number" step="0.1" min="0" max="5" name="swimmingscore" /> -->
+                        <fieldset class="rating">
+                            <input type="radio" id="sstar5" name="swimmingrating" value="5" /><label class = "full" for="sstar5" title="Awesome - 5 stars"></label>
+                            <input type="radio" id="sstar4half" name="swimmingrating" value="4.5" /><label class="half" for="sstar4half" title="Pretty good - 4.5 stars"></label>
+                            <input type="radio" id="sstar4" name="swimmingrating" value="4" /><label class = "full" for="sstar4" title="Pretty good - 4 stars"></label>
+                            <input type="radio" id="sstar3half" name="swimmingrating" value="3.5" /><label class="half" for="sstar3half" title="Meh - 3.5 stars"></label>
+                            <input type="radio" id="sstar3" name="swimmingrating" value="3" /><label class = "full" for="sstar3" title="Meh - 3 stars"></label>
+                            <input type="radio" id="sstar2half" name="swimmingrating" value="2.5" /><label class="half" for="sstar2half" title="Kinda bad - 2.5 stars"></label>
+                            <input type="radio" id="sstar2" name="swimmingrating" value="2" /><label class = "full" for="sstar2" title="Kinda bad - 2 stars"></label>
+                            <input type="radio" id="sstar1half" name="swimmingrating" value="1.5" /><label class="half" for="sstar1half" title="Meh - 1.5 stars"></label>
+                            <input type="radio" id="sstar1" name="swimmingrating" value="1" /><label class = "full" for="sstar1" title="Sucks big time - 1 star"></label>
+                            <input type="radio" id="sstarhalf" name="swimmingrating" value="0.5" /><label class="half" for="sstarhalf" title="Sucks big time - 0.5 stars"></label>
+                        </fieldset>
+
+                          <p> Cardio
+                          <fieldset class="rating">
+                            <input type="radio" id="cstar5" name="cardiorating" value="5" /><label class = "full" for="cstar5" title="Awesome - 5 stars"></label>
+                            <input type="radio" id="cstar4half" name="cardiorating" value="4.5" /><label class="half" for="cstar4half" title="Pretty good - 4.5 stars"></label>
+                            <input type="radio" id="cstar4" name="cardiorating" value="4" /><label class = "full" for="cstar4" title="Pretty good - 4 stars"></label>
+                            <input type="radio" id="cstar3half" name="cardiorating" value="3.5" /><label class="half" for="cstar3half" title="Meh - 3.5 stars"></label>
+                            <input type="radio" id="cstar3" name="cardiorating" value="3" /><label class = "full" for="cstar3" title="Meh - 3 stars"></label>
+                            <input type="radio" id="cstar2half" name="cardiorating" value="2.5" /><label class="half" for="cstar2half" title="Kinda bad - 2.5 stars"></label>
+                            <input type="radio" id="cstar2" name="cardiorating" value="2" /><label class = "full" for="cstar2" title="Kinda bad - 2 stars"></label>
+                            <input type="radio" id="cstar1half" name="cardiorating" value="1.5" /><label class="half" for="cstar1half" title="Meh - 1.5 stars"></label>
+                            <input type="radio" id="cstar1" name="cardiorating" value="1" /><label class = "full" for="cstar1" title="Sucks big time - 1 star"></label>
+                            <input type="radio" id="cstarhalf" name="cardiorating" value="0.5" /><label class="half" for="cstarhalf" title="Sucks big time - 0.5 stars"></label>
+                        </fieldset>
+                          <!---<input placeholder="Cardio" type="number" step="0.1" min="0" max="5" name="Cardioscore"/>-->
+                          <p> Strength
+                           <!---<input placeholder="Strength" type="number" step="0.1" min="0" max="5" name="Strengthscore"/>-->
+                          <fieldset class="rating">
+                            <input type="radio" id="ststar5" name="strengthrating" value="5" /><label class = "full" for="ststar5" title="Awesome - 5 stars"></label>
+                            <input type="radio" id="ststar4half" name="strengthrating" value="4.5" /><label class="half" for="ststar4half" title="Pretty good - 4.5 stars"></label>
+                            <input type="radio" id="ststar4" name="strengthrating" value="4" /><label class = "full" for="ststar4" title="Pretty good - 4 stars"></label>
+                            <input type="radio" id="ststar3half" name="strengthrating" value="3.5" /><label class="half" for="ststar3half" title="Meh - 3.5 stars"></label>
+                            <input type="radio" id="star3" name="strengthrating" value="3" /><label class = "full" for="star3" title="Meh - 3 stars"></label>
+                            <input type="radio" id="ststar2half" name="strengthrating" value="2.5" /><label class="half" for="ststar2half" title="Kinda bad - 2.5 stars"></label>
+                            <input type="radio" id="ststar2" name="strengthrating" value="2" /><label class = "full" for="ststar2" title="Kinda bad - 2 stars"></label>
+                            <input type="radio" id="ststar1half" name="strengthrating" value="1.5" /><label class="half" for="ststar1half" title="Meh - 1.5 stars"></label>
+                            <input type="radio" id="ststar1" name="strengthrating" value="1" /><label class = "full" for="ststar1" title="Sucks big time - 1 star"></label>
+                            <input type="radio" id="ststarhalf" name="strengthrating" value="0.5" /><label class="half" for="ststarhalf" title="Sucks big time - 0.5 stars"></label>
+                        </fieldset>
+                        <p> Squash
+                            <!--<input placeholder="Squash" type="number" step="0.1" min="0" max="5" name="squashscore" />-->
+                        <fieldset class="rating">
+                            <input type="radio" id="sqstar5" name="squashrating" value="5" /><label class = "full" for="sqstar5" title="Awesome - 5 stars"></label>
+                            <input type="radio" id="sqstar4half" name="squashrating" value="4.5" /><label class="half" for="sqstar4half" title="Pretty good - 4.5 stars"></label>
+                            <input type="radio" id="sqstar4" name="squashrating" value="4" /><label class = "full" for="sqstar4" title="Pretty good - 4 stars"></label>
+                            <input type="radio" id="sqstar3half" name="squashrating" value="3.5" /><label class="half" for="sqstar3half" title="Meh - 3.5 stars"></label>
+                            <input type="radio" id="sqstar3" name="squashrating" value="3" /><label class = "full" for="sqstar3" title="Meh - 3 stars"></label>
+                            <input type="radio" id="sqstar2half" name="squashrating" value="2.5" /><label class="half" for="sqstar2half" title="Kinda bad - 2.5 stars"></label>
+                            <input type="radio" id="sqstar2" name="squashrating" value="2" /><label class = "full" for="sqstar2" title="Kinda bad - 2 stars"></label>
+                            <input type="radio" id="sqstar1half" name="squashrating" value="1.5" /><label class="half" for="sqstar1half" title="Meh - 1.5 stars"></label>
+                            <input type="radio" id="sqstar1" name="squashrating" value="1" /><label class = "full" for="sqstar1" title="Sucks big time - 1 star"></label>
+                            <input type="radio" id="sqstarhalf" name="squashrating" value="0.5" /><label class="half" for="sqstarhalf" title="Sucks big time - 0.5 stars"></label>
+                        </fieldset>
+
+                        <input name= "form1" class="formBtn" type="submit" value="Submit Rating" />
+                    </form>
+
+                    
+        </div>
+        </div>
+
+        <div class="col-md-2">
+
+         <div class="list-group">       
+            <a class="list-group-item text-center list-group-item-danger" id="postItem" href="/edit">Edit Profile</a>
+         </div>  
+        </div>
+
+
+
+
+</div>
+</div>
+
+    <br>
+
+  
+
+
+
+<a class="list-group-item text-center list-group-item-info" id="postItem" onclick="showReservations()"><p style="font-size:18px">My reservations</p></a>
+
+
+<div id="contactForm2" style="display: none;">  
+<div class="table-responsive-vertical shadow-z-1">
+  <!-- Table starts here -->
+  <table id="table" class="table table-hover table-mc-light-blue">
+    <thead>
+      <tr>
+        <th><b>Reserved Machine Type </b></th>
+        <th><b>Reserved Machine Number </b></th>
+        <th><b>Start Time</b></th>
+        <th><b>End Time</b></th>
+        <th><b>Cancel Reservation</b></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+      <tr>
+        <td>{{row[3]}}</td>
+        <td>{{row[4]}}</td>
+        <td>{{row[1]}}</td>
+        <td> {{row[2]}}</td>
+        <td>
+          <form action="{{ url_for('reservation') }}" method=post class=deletetable>
+            <input type = hidden name = "{{row[4]}}/{{row[1]}}/{{row[2]}}/{{row[3]}}" value = "{{row[3]}}"/>
+            <input name="deletereservation" type=submit value = Delete></input>
+          </form>
+        </td>
+        <td>
+          
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+</div>
+
+
+
+<br>
+<div class="invitation">
+<a class="list-group-item text-center list-group-item-danger" id="postItem" onclick="showInvitations()"><p style="font-size:18px">Sent Invitations</p></a>
+</div>
+
+<div id="contactForm3" style="display: none;">  
+  <div class="table-responsive-vertical shadow-z-1">
+  <!-- Table starts here -->
+  <table id="table2" class="table table-hover table-mc-light-blue">
+    <thead>
+      <tr>
+        <th><b>Inivited Friend's last Name </b></th>
+        <th><b>Inivited Friend's given Name </b></th>
+        <th><b>Sent time</b></th>
+        <th><b>Invitation Status</b></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in inv_rows %}
+      <tr>
+        <td>{{row.last_name}}</td>
+        <td>{{row.first_name}}</td>
+        <td> {{row.sent_time}}</td>
+        <td> {{row.inv_status}}</td>
+        <td>
+        
+        <td>
+          
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+</div>
+
+<style type="text/css">
+  .list-group-item
+{
+  overflow:hidden;  
+  position: relative;
+  display: block;
+  padding: 20px 20px;
+  margin-bottom: -5px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+</style>
+
+
+<script type="text/javascript">
+  
+function showPostForm(){
+            var e = document.getElementById('contactForm');
+            if(e.style.display == null || e.style.display == "none") {
+                e.style.display = "block";
+            } else {
+                e.style.display = "none";
+            }    
+        }
+
+function showReservations(){
+            var e = document.getElementById('contactForm2');
+            if(e.style.display == null || e.style.display == "none") {
+                e.style.display = "block";
+            } else {
+                e.style.display = "none";
+            }    
+        }
+
+
+function showInvitations(){
+            var e = document.getElementById('contactForm3');
+            if(e.style.display == null || e.style.display == "none") {
+                e.style.display = "block";
+            } else {
+                e.style.display = "none";
+            }    
+        }
+
+
+function validateForm() {
+            
+            var bas_rating= document.forms["change"]["basketballrating"].value;
+            var sw_rating= document.forms["change"]["swimmingrating"].value;
+            var sq_rating= document.forms["change"]["squashrating"].value;
+            var st_rating= document.forms["change"]["strengthrating"].value;
+            var car_rating= document.forms["change"]["cardiorating"].value;
+            if( bas_rating== "") {
+            alert("You did not select basketballrating score!");
+            return false;
+            }; 
+            if( sw_rating== "") {
+            alert("You did not select swimmingrating score!");
+            return false;
+            }; 
+            if( sq_rating== "") {
+            alert("You did not select squashrating score!");
+            return false;
+            }; 
+            if( st_rating== "") {
+            alert("You did not select strengthrating score!");
+            return false;
+            }; 
+            if( car_rating== "") {
+            alert("You did not select cardiorating score!");
+            return false;
+            }; 
+
+          }
+
+</script>
+
+
+
+
+
+
+</body>
+{% endblock %}
