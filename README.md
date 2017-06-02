@@ -5,4 +5,4 @@
 same workout preferences and habits. 
 * users can reserve time slots of exercise machines and look up school bus schedule online.
 ## Introduction video (youtube): 
-https:  https://youtu.be/LX1V-rX8tl8
+https://youtu.be/LX1V-rX8tl8
